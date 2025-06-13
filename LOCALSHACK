@@ -1,16 +1,63 @@
--- DreLib - Custom Simple Library
+-- Speed Hack Variables
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local originalWalkSpeed = humanoid.WalkSpeed
+local speedHackEnabled = false
+local currentSpeed = 16
 
-local DreLib = {}
-
-function DreLib:MakeWindow(options)
-    local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
-    local Window = OrionLib:MakeWindow({
-        Name = options.Name or "DreLib",
-        HidePremium = options.HidePremium or false,
-        SaveConfig = options.SaveConfig or false,
-        ConfigFolder = options.ConfigFolder or "DreLibConfig"
-    })
-    return Window
+-- Function to update walk speed
+local function updateWalkSpeed()
+	if character and character:FindFirstChild("Humanoid") then
+		if speedHackEnabled then
+			character.Humanoid.WalkSpeed = currentSpeed
+		else
+			character.Humanoid.WalkSpeed = originalWalkSpeed
+		end
+	end
 end
 
-return DreLib
+-- Function to handle character respawn
+local function onCharacterAdded(newCharacter)
+	character = newCharacter
+	humanoid = character:WaitForChild("Humanoid")
+	originalWalkSpeed = humanoid.WalkSpeed
+	updateWalkSpeed()
+end
+
+-- Connect character respawn handler
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Add SPEEDHACK Toggle
+Tab:AddToggle({
+	Name = "SPEEDHACK",
+	Default = false,
+	Save = true,
+	Flag = "speedToggle",
+	Callback = function(Value)
+		speedHackEnabled = Value
+		updateWalkSpeed()
+		print("SPEEDHACK toggled:", Value)
+	end
+})
+
+-- Add SPEEDHACK Slider
+Tab:AddSlider({
+	Name = "SPEEDHACK",
+	Min = 16,
+	Max = 100,
+	Default = 16,
+	Color = Color3.fromRGB(255, 255, 255),
+	Increment = 1,
+	ValueName = "Speed",
+	Save = true,
+	Flag = "speedSlider",
+	Callback = function(Value)
+		currentSpeed = Value
+		updateWalkSpeed()
+		print("SPEEDHACK speed set to:", Value)
+	end
+})
+
+-- Initialize the UI (Required)
+OrionLib:Init()
