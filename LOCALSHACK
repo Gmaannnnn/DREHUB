@@ -1,0 +1,84 @@
+local DREHUB = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source"))()
+
+local Window = DREHUB:CreateWindow({
+   Name = "DREHUB",
+   LoadingTitle = "DREHUB Loader",
+   LoadingSubtitle = "Custom Hub",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "DREHUB",
+      FileName = "DREHUBConfig"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "",
+      RememberJoins = false
+   },
+   KeySystem = false
+})
+
+local MainTab = Window:CreateTab("Main", 4483362458)
+local SettingsTab = Window:CreateTab("Settings", 4483362458)
+
+MainTab:CreateButton({
+   Name = "Do Action",
+   Callback = function()
+      print("Action executed!")
+   end,
+})
+
+MainTab:CreateToggle({
+   Name = "Enable Feature",
+   CurrentValue = false,
+   Callback = function(Value)
+      print("Feature state:", Value)
+   end,
+})
+
+MainTab:CreateSlider({
+   Name = "Set Level",
+   Range = {1, 100},
+   Increment = 1,
+   CurrentValue = 10,
+   Callback = function(Value)
+      print("Level set to:", Value)
+   end,
+})
+
+MainTab:CreateDropdown({
+   Name = "Choose Mode",
+   Options = {"Easy", "Normal", "Hard"},
+   CurrentOption = "Normal",
+   Callback = function(Option)
+      print("Mode selected:", Option)
+   end,
+})
+
+MainTab:CreateInput({
+   Name = "Enter Name",
+   PlaceholderText = "Your name here",
+   RemoveTextAfterFocusLost = true,
+   Callback = function(Text)
+      print("Name entered:", Text)
+   end,
+})
+
+MainTab:CreateParagraph({
+   Title = "Welcome to DREHUB",
+   Content = "Enjoy your custom hub."
+})
+
+SettingsTab:CreateButton({
+   Name = "Reset Config",
+   Callback = function()
+      print("Config reset.")
+   end,
+})
+
+SettingsTab:CreateToggle({
+   Name = "Debug Mode",
+   CurrentValue = false,
+   Callback = function(Value)
+      print("Debug Mode:", Value)
+   end,
+})
