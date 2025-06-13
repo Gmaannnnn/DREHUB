@@ -1,0 +1,78 @@
+-- Create the main window
+local Window = OrionLib:MakeWindow({
+	Name = "DREHUB",
+	HidePremium = false,
+	SaveConfig = true,
+	ConfigFolder = "DREHUB_Config"
+})
+
+-- Create a tab inside the window
+local Tab = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998", -- You can change this icon
+	PremiumOnly = false
+})
+
+-- Speed Hack Variables
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local originalWalkSpeed = humanoid.WalkSpeed
+local speedHackEnabled = false
+local currentSpeed = 16
+
+-- Function to update walk speed
+local function updateWalkSpeed()
+	if character and character:FindFirstChild("Humanoid") then
+		if speedHackEnabled then
+			character.Humanoid.WalkSpeed = currentSpeed
+		else
+			character.Humanoid.WalkSpeed = originalWalkSpeed
+		end
+	end
+end
+
+-- Function to handle character respawn
+local function onCharacterAdded(newCharacter)
+	character = newCharacter
+	humanoid = character:WaitForChild("Humanoid")
+	originalWalkSpeed = humanoid.WalkSpeed
+	updateWalkSpeed()
+end
+
+-- Connect character respawn handler
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Add SPEEDHACK Toggle
+Tab:AddToggle({
+	Name = "SPEEDHACK",
+	Default = false,
+	Save = true,
+	Flag = "speedToggle",
+	Callback = function(Value)
+		speedHackEnabled = Value
+		updateWalkSpeed()
+		print("SPEEDHACK toggled:", Value)
+	end
+})
+
+-- Add SPEEDHACK Slider
+Tab:AddSlider({
+	Name = "SPEEDHACK",
+	Min = 16,
+	Max = 100,
+	Default = 16,
+	Color = Color3.fromRGB(255, 255, 255),
+	Increment = 1,
+	ValueName = "Speed",
+	Save = true,
+	Flag = "speedSlider",
+	Callback = function(Value)
+		currentSpeed = Value
+		updateWalkSpeed()
+		print("SPEEDHACK speed set to:", Value)
+	end
+})
+
+-- Initialize the UI (Required)
+OrionLib:Init()
