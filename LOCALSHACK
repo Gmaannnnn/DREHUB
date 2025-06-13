@@ -1,0 +1,16 @@
+-- DreLib - Custom Simple Library
+
+local DreLib = {}
+
+function DreLib:MakeWindow(options)
+    local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+    local Window = OrionLib:MakeWindow({
+        Name = options.Name or "DreLib",
+        HidePremium = options.HidePremium or false,
+        SaveConfig = options.SaveConfig or false,
+        ConfigFolder = options.ConfigFolder or "DreLibConfig"
+    })
+    return Window
+end
+
+return DreLib
